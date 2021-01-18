@@ -8,11 +8,12 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from save_file import *
-def fire_bullets(ai_settings,screen,ship,bullets):
+def fire_bullets(ai_settings,screen,ship,bullets,bullet_sound):
     """ create bullets """
     if len(bullets)<ai_settings.bullet_allowed:
         new_bullet = Bullet(ai_settings,screen,ship)
         bullets.add(new_bullet)
+        bullet_sound.play()
 
 def get_number_alienx(ai_settings, alien):
     alien_width = alien.rect.width
@@ -62,14 +63,14 @@ def change_fleet_direction(ai_settings,aliens):
         alien.rect.y+= ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *=-1
 
-def check_key_down(event,ai_settings,screen,stats,aliens, ship,bullets,score_board):
+def check_key_down(event,ai_settings,screen,stats,aliens, ship,bullets,score_board,bullet_sound):
     """ respond to key down  """
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
     elif event.key == pygame.K_SPACE:
-        fire_bullets(ai_settings, screen, ship, bullets)
+        fire_bullets(ai_settings, screen, ship, bullets,bullet_sound)
     elif event.key == pygame.K_p and not stats.game_active:
         pygame.mouse.set_visible(False)
         ai_settings.initialize_dynamic_settings()
@@ -112,14 +113,14 @@ def check_key_up (event,ai_settings, screen, ship, bullets):
         ship.moving_left = False
     
 
-def check_event(ai_settings, screen,stats,aliens,ship,bullets,play_button,score_board):
+def check_event(ai_settings, screen,stats,aliens,ship,bullets,play_button,score_board,bullet_sound):
     """ respond to keypresses and mouse events """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             write_file(stats.high_score,ai_settings)
             sys.exit()
         elif event.type == KEYDOWN:
-            check_key_down(event,ai_settings,screen,stats,aliens, ship, bullets,score_board)
+            check_key_down(event,ai_settings,screen,stats,aliens, ship, bullets,score_board,bullet_sound)
             if event.key == pygame.K_ESCAPE:
                 write_file(stats.high_score,ai_settings)
                 sys.exit()

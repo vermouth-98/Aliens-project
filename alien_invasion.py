@@ -40,13 +40,22 @@ def run_game():
 
     #make buttom play
     play_button = Buttom(ai_settings,screen,"play")
-
+    
     #ScoreBoard
     score_board = Scoreboard(ai_settings,screen,stats)
+    #background music
+    background_music = pygame.mixer.music.load('anh\\nhacnen.mp3')
+    #sound effect
+    bullet_sound = pygame.mixer.Sound("anh\\bulletsound.mp3")
+    bullet_sound.set_volume(0.1)
+    destroy_sound = pygame.mixer.Sound("anh\\destroy.wav")
+    destroy_sound.set_volume(0.5)
+    pygame.mixer.music.play(-10)
+
     #Start the main loop for the game.
     while True:
         # watch for keyboard and mouse events.
-        fg.check_event(ai_settings, screen,stats,aliens,ship,bullets,play_button,score_board)
+        fg.check_event(ai_settings, screen,stats,aliens,ship,bullets,play_button,score_board,bullet_sound)
         if stats.game_active:
             ship.update()
             fg.update_bullets(ai_settings,screen,ship,stats, bullets,aliens,score_board)
